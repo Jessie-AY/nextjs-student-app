@@ -2,12 +2,32 @@ import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 
-const prisma = new PrismaClient();
+// Use a singleton for PrismaClient to avoid connection leaks
+let prisma: PrismaClient;
+if (process.env.NODE_ENV === 'production') {
+  prisma = new PrismaClient();
+} else {
+  // @ts-ignore
+  if (!global.prisma) {
+    // @ts-ignore
+    global.prisma = new PrismaClient();
+  }
+  // @ts-ignore
+  prisma = global.prisma;
+}
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { email, password } = body;
+
+    // Input validation
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: "Email and password are required" },
+        { status: 400 }
+      );
+    }
 
     // Find user by email
     const user = await prisma.users.findUnique({
