@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model course_enrollment {
+  enrollment_id   Int       @id @default(autoincrement())
+  student_id      Int?
+  course_id       Int?
+  enrollment_date DateTime? @db.Date
+  courses         courses?  @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction)
+  students        students? @relation(fields: [student_id], references: [student_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model courses {
+  course_id                  Int                          @id @default(autoincrement())
+  course_name                String                       @db.VarChar(100)
+  credit_hours               Int
+  course_enrollment          course_enrollment[]
+  lecturer_course_assignment lecturer_course_assignment[]
+}
+
+model lecturer_course_assignment {
+  id          Int        @id @default(autoincrement())
+  lecturer_id Int?
+  course_id   Int?
+  courses     courses?   @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction)
+  lecturers   lecturers? @relation(fields: [lecturer_id], references: [lecturer_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model lecturer_ta_assignment {
+  id          Int        @id @default(autoincrement())
+  lecturer_id Int?
+  ta_id       Int?
+  lecturers   lecturers? @relation(fields: [lecturer_id], references: [lecturer_id], onDelete: NoAction, onUpdate: NoAction)
+  ta          ta?        @relation(fields: [ta_id], references: [ta_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model lecturers {
+  lecturer_id                Int                          @id @default(autoincrement())
+  lecturer_name              String                       @db.VarChar(100)
+  lecturer_email             String                       @db.VarChar(50)
+  lecturer_course_assignment lecturer_course_assignment[]
+  lecturer_ta_assignment     lecturer_ta_assignment[]
+}
+
+model student_fees {
+  payment_id   Int       @id @default(autoincrement())
+  payment_date DateTime? @db.Date
+  amount_paid  Decimal   @db.Decimal(10, 2)
+  student_id   Int?
+  students     students? @relation(fields: [student_id], references: [student_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model students {
+  student_id        Int                 @id @default(autoincrement())
+  student_name      String              @db.VarChar(100)
+  student_email     String              @db.VarChar(50)
+  student_contact   String              @db.VarChar(50)
+  course_enrollment course_enrollment[]
+  student_fees      student_fees[]
+}
+
+model ta {
+  ta_id                  Int                      @id @default(autoincrement())
+  ta_name                String                   @db.VarChar(100)
+  ta_email               String                   @db.VarChar(50)
+  lecturer_ta_assignment lecturer_ta_assignment[]
+}
+
+model users {
+  id       Int     @id @default(autoincrement())
+  name     String? @db.VarChar(100)
+  email    String  @unique @db.VarChar(100)
+  password String
+}
