@@ -84,7 +84,7 @@ export default function DashboardPage() {
                 </thead>
                 <tbody>
                   {students.map((student) => (
-                    <tr key={student.student_id} className="text-center hover:bg-[#FCFAF2] transition">
+                    <tr key={student.student_id} className="text-center hover:bg-[#FCFAF2] transition text-gray-800">
                       <td className="p-2 shadow-sm bg-white">{student.student_id}</td>
                       <td className="p-2 shadow-sm bg-white">{student.student_name}</td>
                       <td className="p-2 shadow-sm bg-white">{student.student_email}</td>
@@ -110,7 +110,7 @@ export default function DashboardPage() {
                 </thead>
                 <tbody>
                   {courses.map((course) => (
-                    <tr key={course.course_id} className="text-center hover:bg-[#FCFAF2] transition">
+                    <tr key={course.course_id} className="text-center hover:bg-[#FCFAF2] transition text-gray-800">
                       <td className="p-2 shadow-sm bg-white">{course.course_id}</td>
                       <td className="p-2 shadow-sm bg-white">{course.course_name}</td>
                       <td className="p-2 shadow-sm bg-white">{course.credit_hours}</td>
@@ -135,7 +135,7 @@ export default function DashboardPage() {
                 </thead>
                 <tbody>
                   {lecturers.map((lect) => (
-                    <tr key={lect.lecturer_id} className="text-center hover:bg-[#FCFAF2] transition">
+                    <tr key={lect.lecturer_id} className="text-center hover:bg-[#FCFAF2] transition text-gray-800">
                       <td className="p-2 shadow-sm bg-white">{lect.lecturer_id}</td>
                       <td className="p-2 shadow-sm bg-white">{lect.lecturer_name}</td>
                       <td className="p-2 shadow-sm bg-white">{lect.lecturer_email}</td>
